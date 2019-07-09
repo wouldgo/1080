@@ -1,0 +1,21 @@
+{
+  "name": "video-guz",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "Dario Andrei <wouldgo84@gmail.com",
+  "license": "ISC",
+  "scripts": {
+    "start": "python3 -m http.server",
+    "lint": "eslint .",
+    "validate": "npm run lint",
+    "precommit": "npm run validate",
+    "preversion": "npm run validate",
+    "version": "git add -A .",
+    "postversion": "git push && git push --tags"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "husky": "^2.3.0"
+  }
+}
