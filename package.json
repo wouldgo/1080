@@ -15,7 +15,7 @@
     "postversion": "git push && git push --tags"
   },
   "devDependencies": {
-    "eslint": "^5.16.0",
-    "husky": "^2.3.0"
+    "eslint": "^6.0.1",
+    "husky": "^3.0.0"
   }
 }
