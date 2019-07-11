@@ -1,4 +1,7 @@
-const resolution = [640, 480]
+import {animation} from './interaction.js';
+
+const playerElement = document.querySelector('#player')
+  , resolution = [640, 480]
   , videoIds = [
     'zk1us0NYfug',
     'xQLB3g0KqmY',
@@ -28,8 +31,18 @@ const resolution = [640, 480]
       thisStatus.player.seekTo(0);
     }
     console.info(event.data);
+  }
+  , playerLoop = () => {
+    const allAreReady = Array.from(playersStatuses.values())
+      .every(elm => elm.status === YT.PlayerState.PAUSED);
+
+    if (allAreReady) {
+
+
+    }
   };
 
+animation(playerLoop);
 window.onYouTubeIframeAPIReady = () => {
   const player1 = new YT.Player('player-1', {
       'height': resolution[1],
@@ -74,7 +87,6 @@ tag.src = 'https://www.youtube.com/iframe_api';
 const firstScriptTag = document.getElementsByTagName('script')[0];
 
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
 
 export const nextVideo = () => {
 
