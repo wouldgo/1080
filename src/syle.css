@@ -12,13 +12,35 @@ body {
   border: 0;
 
   display: grid;
-  grid-template-rows: [players] auto [controls] 1fr;
-  grid-template-columns: [space-1] 5% [player-1] 30% [player-2] 30% [player-3] 30% [space-2] 5%;
+  grid-template-rows: [players] auto [status] 1fr [controls] 1fr;
+  grid-template-columns: [space-1] 5fr [player-1] 30fr [player-2] 30fr [player-3] 30fr [space-2] 5fr;
 }
 
 a, a:hover {
   color: inherit;
   text-decoration: none;
+}
+
+iframe {
+  visibility: hidden;
+}
+
+iframe.visible {
+  visibility: visible;
+}
+
+.status {
+  grid-column-start: player-1;
+  grid-column-end: space-2;
+  grid-row-start: status;
+  grid-row-end: status;
+  justify-self: center;
+  align-self: center;
+}
+
+.status span {
+  padding: 0 15rem;
+  cursor: none;
 }
 
 .controls {
@@ -31,7 +53,12 @@ a, a:hover {
 }
 
 .controls span {
+  visibility: hidden;
   padding: 0 15rem;
   font-size: 5rem;
   cursor: pointer;
+}
+
+.controls.visible span {
+  visibility: visible;
 }

@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title></title>
     <link href="src/syle.css" rel="stylesheet" type="text/css">
   </head>
   <body>
     <div></div>
 
+    <div id="player-0"></div>
     <div id="player-1"></div>
     <div id="player-2"></div>
-    <div id="player-3"></div>
 
     <div></div>
+
+    <div class="status">
+      <span class="time">0</span>
+    </div>
 
     <div class="controls">
       <span onclick="playPrevVideo()"><-</span>
       <span onclick="playVideo()">play</span>
       <span onclick="playNextVideo()">-></span>
     </div>
-    <span id="player"></span>
+
+
     <script src="src/interaction.js" type="module"></script>
     <script src="src/player.js" type="module"></script>
     <script src="src/controls.js" type="module"></script>

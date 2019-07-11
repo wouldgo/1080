@@ -1,6 +1,8 @@
 export const animation = stuff => {
-  let start
-    , actualRequest;
+  let oldTimestamp
+    , fps
+    , actualRequest
+    , whenThisWillBe0 = 500;
   const stopItNow = () => {
 
     if (actualRequest) {
@@ -9,15 +11,24 @@ export const animation = stuff => {
     }
   }
   , step = timestamp => {
-    if (!start) {
+    actualRequest = window.requestAnimationFrame(step);
+    if (oldTimestamp) {
 
-      start = timestamp;
+      fps = Math.round(1000 / (timestamp - oldTimestamp));
     }
-    const progress = timestamp - start;
+
+    oldTimestamp = timestamp;
 
     stuff();
-    if (progress < 2000) {
-      actualRequest = window.requestAnimationFrame(step);
+    whenThisWillBe0 -= 1;
+    if (whenThisWillBe0) {
+
+      const fpsEvent = new window.CustomEvent('interaction:fps', {
+        'detail': fps
+      });
+
+      document.dispatchEvent(fpsEvent);
+      whenThisWillBe0 = 500;
     }
   };
 
