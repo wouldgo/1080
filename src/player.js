@@ -2,8 +2,9 @@ import {animation} from './interaction.js';
 
 let readySent = false
   , playerFocused = 0
+  , nextFocused = 0
   , isPlaying = false
-  , currentTime;
+  , currentTime = 0;
 const controlsElement = document.querySelector('.controls')
   , resolution = [640, 480]
   , players = [
@@ -18,49 +19,29 @@ const controlsElement = document.querySelector('.controls')
   ]
   , playerVars = {
     'autoplay': 0,
+    'color': 'black',
     'controls': 0,
     'disablekb': 1,
+    'enablejsapi': 1,
     'fs': 0,
     'iv_load_policy': 3,
     'modestbranding': 1,
-    'rel': 0,
-    'showinfo': 0
+    'rel': 0
   }
   , tag = document.createElement('script')
   , playersStatuses = new Map()
-  , onReady = identifier => () => {
-    const thisStatus = playersStatuses.get(identifier);
-
-    playersStatuses.set(identifier, Object.assign(thisStatus, {
-      'status': YT.PlayerState.UNSTARTED
-    }));
-
-    thisStatus.player.seekTo(0);
-    thisStatus.player.pauseVideo();
-  }
-  , switchAudio = () => {
-    const unFocused = players.filter(elm => elm !== players[playerFocused])
-      , focusedPlayer = playersStatuses.get(`player-${playerFocused}`).player;
-
-    unFocused
-      .map(aPlayerName => playersStatuses.get(aPlayerName))
-      .map(elm => elm.player)
-      .forEach(elm => elm.pauseVideo());
-
-    focusedPlayer.seekTo(currentTime);
-    focusedPlayer.playVideo();
-  }
   , playerLoop = () => {
-    const playersStatusesArray = Array.from(playersStatuses.entries());
+    if (playersStatuses.size === players.length) {
+      if (!readySent) {
+        const playerReady = new window.Event('player:ready');
 
-    if (playersStatusesArray.length === players.length) {
-      const allAreReady = playersStatusesArray
-        .map(elm => elm[1])
-        .map(elm => elm.status)
-        .every(elm => elm === YT.PlayerState.UNSTARTED);
+        readySent = true;
+        controlsElement.dispatchEvent(playerReady);
+      }
 
-      if (allAreReady) {
-        const newTime = playersStatuses.get(`player-${playerFocused}`).player.getCurrentTime();
+      if (isPlaying) {
+        const currentPlayer = playersStatuses.get(`player-${playerFocused}`)
+          , newTime = currentPlayer.getCurrentTime();
 
         if (newTime !== currentTime) {
 
@@ -71,27 +52,19 @@ const controlsElement = document.querySelector('.controls')
 
           controlsElement.dispatchEvent(currentTimeEvent);
         }
-      }
 
-      playersStatusesArray
-        .map(elm => elm[1])
-        .forEach((elm, index) => {
-          const {player} = elm;
+        if (playerFocused !== nextFocused) {
+          const nextPlayer = playersStatuses.get(`player-${nextFocused}`);
 
-          if (index === playerFocused) {
+          currentPlayer.getIframe().classList.remove('visible');
+          currentPlayer.mute();
 
-            player.getIframe().classList.add('visible');
-            return;
-          }
+          nextPlayer.getIframe().classList.add('visible');
+          nextPlayer.seekTo(currentTime);
+          nextPlayer.unMute();
 
-          player.getIframe().classList.remove('visible');
-        });
-
-      if (!readySent && allAreReady) {
-        const playerReady = new window.Event('player:ready');
-
-        readySent = true;
-        controlsElement.dispatchEvent(playerReady);
+          playerFocused = nextFocused;
+        }
       }
     }
   };
@@ -104,7 +77,12 @@ window.onYouTubeIframeAPIReady = () => {
       'videoId': videoIds[0],
       playerVars,
       'events': {
-        'onReady': onReady(players[0])
+        'onReady': () => {
+
+          player1.mute();
+          player1.seekTo(0);
+          playersStatuses.set(players[0], player1);
+        }
       }
     })
     , player2 = new YT.Player(players[1], {
@@ -113,7 +91,12 @@ window.onYouTubeIframeAPIReady = () => {
       'videoId': videoIds[1],
       playerVars,
       'events': {
-        'onReady': onReady(players[1])
+        'onReady': () => {
+
+          player2.mute();
+          player2.seekTo(0);
+          playersStatuses.set(players[1], player2);
+        }
       }
     })
     , player3 = new YT.Player(players[2], {
@@ -122,19 +105,14 @@ window.onYouTubeIframeAPIReady = () => {
       'videoId': videoIds[2],
       playerVars,
       'events': {
-        'onReady': onReady(players[2])
+        'onReady': () => {
+
+          player3.mute();
+          player3.seekTo(0);
+          playersStatuses.set(players[2], player3);
+        }
       }
     });
-
-    playersStatuses.set(players[0], Object.assign({}, {
-      'player': player1
-    }));
-    playersStatuses.set(players[1], Object.assign({}, {
-      'player': player2
-    }));
-    playersStatuses.set(players[2], Object.assign({}, {
-      'player': player3
-    }));
 };
 
 tag.src = 'https://www.youtube.com/iframe_api';
@@ -143,9 +121,7 @@ const firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 export const nextVideo = () => {
-  playerFocused = (playerFocused + 1) % players.length;
-
-  return switchAudio();
+  nextFocused = (playerFocused + 1) % players.length;
 };
 
 export const prevVideo = () => {
@@ -153,23 +129,26 @@ export const prevVideo = () => {
 
   if (newValue < 0) {
 
-    playerFocused = players.length + newValue;
+    nextFocused = players.length + newValue;
   } else {
 
-    playerFocused = newValue;
+    nextFocused = newValue;
   }
-
-  return switchAudio();
 };
 
 export const play = () => {
+  const currentPlayer = playersStatuses.get(`player-${playerFocused}`);
 
   if (!isPlaying) {
 
     isPlaying = true;
-    return playersStatuses.get(`player-${playerFocused}`).player.playVideo();
+    currentPlayer.getIframe().classList.add('visible');
+    currentPlayer.seekTo(currentTime);
+    currentPlayer.unMute();
+    return;
   }
 
   isPlaying = false;
-  playersStatuses.get(`player-${playerFocused}`).player.pauseVideo();
+  currentPlayer.getIframe().classList.remove('visible');
+  currentPlayer.mute();
 };

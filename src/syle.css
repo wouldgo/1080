@@ -22,11 +22,13 @@ a, a:hover {
 }
 
 iframe {
-  visibility: hidden;
+  width: 1px;
+  height: 1px;
 }
 
 iframe.visible {
-  visibility: visible;
+  width: 640px;
+  height: 480px;
 }
 
 .status {
