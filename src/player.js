@@ -1,10 +1,10 @@
 import {animation} from './interaction.js';
 
 let readySent = false
-  , playerFocused = 0
+  , playerFocused = -1
   , isPlaying = false
   , currentTime;
-const controlsElement = document.querySelector('.controls')
+const playerElement = document.querySelector('.player')
   , resolution = [640, 480]
   , players = [
     'player-0',
@@ -59,7 +59,8 @@ const controlsElement = document.querySelector('.controls')
         .map(elm => elm.status)
         .every(elm => elm === YT.PlayerState.UNSTARTED);
 
-      if (allAreReady) {
+      if (allAreReady &&
+        playerFocused !== -1) {
         const newTime = playersStatuses.get(`player-${playerFocused}`).player.getCurrentTime();
 
         if (newTime !== currentTime) {
@@ -69,7 +70,7 @@ const controlsElement = document.querySelector('.controls')
             'detail': currentTime
           });
 
-          controlsElement.dispatchEvent(currentTimeEvent);
+          playerElement.dispatchEvent(currentTimeEvent);
         }
       }
 
@@ -80,18 +81,18 @@ const controlsElement = document.querySelector('.controls')
 
           if (index === playerFocused) {
 
-            player.getIframe().classList.add('visible');
+            //move player.getIframe() into class .player
             return;
           }
 
-          player.getIframe().classList.remove('visible');
+          //move player.getIframe() out of class .player
         });
 
       if (!readySent && allAreReady) {
         const playerReady = new window.Event('player:ready');
 
         readySent = true;
-        controlsElement.dispatchEvent(playerReady);
+        playerElement.dispatchEvent(playerReady);
       }
     }
   };
@@ -167,6 +168,11 @@ export const play = () => {
   if (!isPlaying) {
 
     isPlaying = true;
+    if (playerFocused === -1) {
+
+      playerFocused = 0;
+    }
+
     return playersStatuses.get(`player-${playerFocused}`).player.playVideo();
   }
 

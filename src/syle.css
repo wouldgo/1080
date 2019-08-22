@@ -12,8 +12,12 @@ body {
   border: 0;
 
   display: grid;
-  grid-template-rows: [players] auto [status] 1fr [controls] 1fr;
-  grid-template-columns: [space-1] 5fr [player-1] 30fr [player-2] 30fr [player-3] 30fr [space-2] 5fr;
+  grid-template-columns: [left-border] 5px [player] auto [rigth-border] 5px;
+}
+
+.player {
+  min-width: 640px;
+  min-height: 480px;
 }
 
 a, a:hover {
@@ -23,42 +27,10 @@ a, a:hover {
 
 iframe {
   visibility: hidden;
+  max-width: 0px;
+  max-height: 0px;
 }
 
 iframe.visible {
-  visibility: visible;
-}
-
-.status {
-  grid-column-start: player-1;
-  grid-column-end: space-2;
-  grid-row-start: status;
-  grid-row-end: status;
-  justify-self: center;
-  align-self: center;
-}
-
-.status span {
-  padding: 0 15rem;
-  cursor: none;
-}
-
-.controls {
-  grid-column-start: player-1;
-  grid-column-end: space-2;
-  grid-row-start: controls;
-  grid-row-end: controls;
-  justify-self: center;
-  align-self: center;
-}
-
-.controls span {
-  visibility: hidden;
-  padding: 0 15rem;
-  font-size: 5rem;
-  cursor: pointer;
-}
-
-.controls.visible span {
   visibility: visible;
 }

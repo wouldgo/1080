@@ -1,25 +1,55 @@
 import {nextVideo, prevVideo, play} from './player.js';
 
-const controlsElement = document.querySelector('.controls')
-  , timeStatusElement = document.querySelector('.status .time')
+const playerElement = document.querySelector('.player')
   , titleElement = document.querySelector('title')
   , readyEventHandler = () => {
 
-    return controlsElement.classList.add('visible');
+    return playerElement.classList.add('visible');
   }
   , currentTimeEventHanlder = ({detail}) => {
+    const [, ...rest] = titleElement.text.split(' - ');
 
-    timeStatusElement.innerHTML = detail.toFixed(0);
+    titleElement.text = [
+      [
+        'Time',
+        detail.toFixed(0)
+      ].join(': '),
+      ...rest
+    ].join(' - ');
   }
   , fpsEventHandler = ({detail}) => {
+    const [time, fps, ...rest] = titleElement.text.split(' - ');
 
-    titleElement.text = detail;
+    titleElement.text = [
+      time,
+      [
+        'Fps: ',
+        detail
+      ].join(': '),
+      ...rest
+    ].join(' - ');
   };
 
-controlsElement.addEventListener('player:ready', readyEventHandler, false);
-controlsElement.addEventListener('player:current-time', currentTimeEventHanlder, false);
+playerElement.addEventListener('player:ready', readyEventHandler, false);
+playerElement.addEventListener('player:current-time', currentTimeEventHanlder, false);
 document.addEventListener('interaction:fps', fpsEventHandler, false);
 
-window.playVideo = () => play();
-window.playPrevVideo = () => prevVideo();
-window.playNextVideo = () => nextVideo();
+document.addEventListener('keyup', event => {
+  event.preventDefault();
+  const key = event.key || event.keyCode;
+
+  if (key === ' ' || key === 32) { //Play
+
+    return play();
+  } else if (key === 'ArrowRight' || key === 39) { //Next
+
+    return nextVideo();
+  } else if (key === 'ArrowLeft' || key === 37) { //Prev
+
+    return prevVideo();
+  }
+
+  /*eslint-disable no-console*/
+  console.trace(event.key, event.keyCode);
+  /*eslint-enable*/
+});
