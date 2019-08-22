@@ -3,8 +3,9 @@ import {animation} from './interaction.js';
 let readySent = false
   , playerFocused = -1
   , isPlaying = false
-  , currentTime;
+  , currentTime = 0;
 const playerElement = document.querySelector('.player')
+  , bodyElement = document.querySelector('body')
   , resolution = [640, 480]
   , players = [
     'player-0',
@@ -17,38 +18,59 @@ const playerElement = document.querySelector('.player')
     'YERHP5wp_zw'
   ]
   , playerVars = {
-    'autoplay': 0,
-    'controls': 0,
-    'disablekb': 1,
+    'autoplay': 1,
+    'controls': 1,
+    'disablekb': 0,
     'fs': 0,
     'iv_load_policy': 3,
     'modestbranding': 1,
     'rel': 0,
     'showinfo': 0
   }
-  , tag = document.createElement('script')
   , playersStatuses = new Map()
   , onReady = identifier => () => {
     const thisStatus = playersStatuses.get(identifier);
 
-    playersStatuses.set(identifier, Object.assign(thisStatus, {
-      'status': YT.PlayerState.UNSTARTED
-    }));
+    if (!thisStatus.status) {
 
-    thisStatus.player.seekTo(0);
-    thisStatus.player.pauseVideo();
+      playersStatuses.set(identifier, Object.assign(thisStatus, {
+        'status': YT.PlayerState.UNSTARTED
+      }));
+    }
   }
   , switchAudio = () => {
     const unFocused = players.filter(elm => elm !== players[playerFocused])
-      , focusedPlayer = playersStatuses.get(`player-${playerFocused}`).player;
+      , focusedPlayerSelector = `player-${playerFocused}`
+      , focusedPlayer = playersStatuses.get(focusedPlayerSelector).player
+      , focusedIframe = focusedPlayer.getIframe()
+      , playerFocusedInElement = playerElement.querySelector(`#${focusedPlayerSelector}`);
+
+    if (!isPlaying) {
+
+      focusedPlayer.pauseVideo();
+      return;
+    }
+
+    if (!playerFocusedInElement) {
+
+      for (const playerWasFocus of playerElement.children) {
+
+        playerWasFocus.classList.remove('visible');
+        bodyElement.appendChild(playerWasFocus);
+      }
+
+      playerElement.appendChild(focusedIframe);
+      focusedIframe.classList.add('visible');
+    }
+
+    //console.info('play', focusedPlayerSelector, currentTime)
+    focusedPlayer.playVideo();
+    focusedPlayer.seekTo(currentTime, true);
 
     unFocused
       .map(aPlayerName => playersStatuses.get(aPlayerName))
       .map(elm => elm.player)
       .forEach(elm => elm.pauseVideo());
-
-    focusedPlayer.seekTo(currentTime);
-    focusedPlayer.playVideo();
   }
   , playerLoop = () => {
     const playersStatusesArray = Array.from(playersStatuses.entries());
@@ -60,10 +82,13 @@ const playerElement = document.querySelector('.player')
         .every(elm => elm === YT.PlayerState.UNSTARTED);
 
       if (allAreReady &&
-        playerFocused !== -1) {
-        const newTime = playersStatuses.get(`player-${playerFocused}`).player.getCurrentTime();
+        playerFocused !== -1 &&
+        isPlaying) {
+        const player = playersStatuses.get(`player-${playerFocused}`).player
+          , newTime = player.getCurrentTime();
 
-        if (newTime !== currentTime) {
+          //console.info(playerFocused, '-', newTime, currentTime);
+          if (newTime > currentTime) {
 
           currentTime = newTime;
           const currentTimeEvent = new window.CustomEvent('player:current-time', {
@@ -73,20 +98,6 @@ const playerElement = document.querySelector('.player')
           playerElement.dispatchEvent(currentTimeEvent);
         }
       }
-
-      playersStatusesArray
-        .map(elm => elm[1])
-        .forEach((elm, index) => {
-          const {player} = elm;
-
-          if (index === playerFocused) {
-
-            //move player.getIframe() into class .player
-            return;
-          }
-
-          //move player.getIframe() out of class .player
-        });
 
       if (!readySent && allAreReady) {
         const playerReady = new window.Event('player:ready');
@@ -138,11 +149,6 @@ window.onYouTubeIframeAPIReady = () => {
     }));
 };
 
-tag.src = 'https://www.youtube.com/iframe_api';
-const firstScriptTag = document.getElementsByTagName('script')[0];
-
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
 export const nextVideo = () => {
   playerFocused = (playerFocused + 1) % players.length;
 
@@ -165,17 +171,17 @@ export const prevVideo = () => {
 
 export const play = () => {
 
-  if (!isPlaying) {
+  if (isPlaying) {
+
+    isPlaying = false;
+  } else {
 
     isPlaying = true;
     if (playerFocused === -1) {
 
       playerFocused = 0;
     }
-
-    return playersStatuses.get(`player-${playerFocused}`).player.playVideo();
   }
 
-  isPlaying = false;
-  playersStatuses.get(`player-${playerFocused}`).player.pauseVideo();
+  return switchAudio();
 };

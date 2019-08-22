@@ -13,6 +13,7 @@ body {
 
   display: grid;
   grid-template-columns: [left-border] 5px [player] auto [rigth-border] 5px;
+  justify-items: center;
 }
 
 .player {
@@ -33,4 +34,6 @@ iframe {
 
 iframe.visible {
   visibility: visible;
+  max-width: inherit;
+  max-height: inherit;
 }
