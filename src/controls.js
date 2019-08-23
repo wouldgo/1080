@@ -1,6 +1,6 @@
 import {nextVideo, prevVideo, play} from './player.js';
 
-const playerElement = document.querySelector('.player')
+const bodyElement = document.querySelector('body')
   , titleElement = document.querySelector('title')
   , currentTimeEventHanlder = ({detail}) => {
     const [, ...rest] = titleElement.text.split(' - ');
@@ -26,7 +26,7 @@ const playerElement = document.querySelector('.player')
     ].join(' - ');
   };
 
-playerElement.addEventListener('player:current-time', currentTimeEventHanlder, false);
+bodyElement.addEventListener('player:current-time', currentTimeEventHanlder, false);
 document.addEventListener('interaction:fps', fpsEventHandler, false);
 
 document.addEventListener('keyup', event => {

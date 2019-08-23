@@ -3,9 +3,8 @@ import {animation} from './interaction.js';
 let playerFocused = -1
   , isPlaying = false
   , currentTime = -1;
-const playerElement = document.querySelector('.player')
-  , bodyElement = document.querySelector('body')
-  , resolution = [640, 480]
+const bodyElement = document.querySelector('body')
+  , resolution = [800, 600]
   , players = [
     'player-0',
     'player-1',
@@ -21,15 +20,18 @@ const playerElement = document.querySelector('.player')
     const unFocused = players.filter(elm => elm !== players[playerFocused])
       , focusedPlayerSelector = `player-${playerFocused}`
       , focusedPlayer = playersStatuses.get(focusedPlayerSelector).player
-      , focusedIframe = focusedPlayer.getIframe()
-      , playerFocusedInElement = playerElement.querySelector(`#${focusedPlayerSelector}`);
-
+      , focusedIframe = focusedPlayer.getIframe();
 
     unFocused
       .map(aPlayerName => playersStatuses.get(aPlayerName))
       .filter(elm => elm)
       .map(elm => elm.player)
-      .forEach(elm => elm.pauseVideo());
+      .map(elm => {
+        elm.getIframe().classList.remove('visible');
+
+        return elm;
+      })
+      .forEach(elm => elm.mute());
 
     if (!isPlaying) {
 
@@ -37,19 +39,14 @@ const playerElement = document.querySelector('.player')
       return;
     }
 
-    if (!playerFocusedInElement) {
+    focusedIframe.classList.add('visible');
 
-      for (const playerWasFocus of playerElement.children) {
+    if (currentTime > focusedPlayer.getCurrentTime()) {
 
-        playerWasFocus.classList.remove('visible');
-        bodyElement.appendChild(playerWasFocus);
-      }
-
-      playerElement.appendChild(focusedIframe);
-      focusedIframe.classList.add('visible');
+      focusedPlayer.seekTo(currentTime, true);
     }
 
-    focusedPlayer.playVideo();
+    focusedPlayer.unMute();
   }
   , playerLoop = () => {
     const playersStatusesArray = Array.from(playersStatuses.entries());
@@ -60,20 +57,14 @@ const playerElement = document.querySelector('.player')
         const player = playersStatuses.get(`player-${playerFocused}`).player
           , newTime = player.getCurrentTime();
 
-          //console.info(playerFocused, '-', newTime, currentTime);
           if (newTime > currentTime) {
 
           currentTime = newTime;
-          playersStatusesArray.forEach(([, aStatus]) => {
-
-            aStatus.player.seekTo(currentTime);
-          });
-
           const currentTimeEvent = new window.CustomEvent('player:current-time', {
             'detail': currentTime
           });
 
-          playerElement.dispatchEvent(currentTimeEvent);
+          bodyElement.dispatchEvent(currentTimeEvent);
         }
       }
     }
@@ -84,82 +75,52 @@ window.onYouTubeIframeAPIReady = () => {
   const player1 = new YT.Player(players[0], {
       'height': resolution[1],
       'width': resolution[0],
-      'videoId': videoIds[0],
-      'events': {
-        'onChange': (event) => {
-          debugger
-          console.info(event)
-        }
-      },
-      'playerVars': {
-        'autoplay': 0,
-        'controls': 0,
-        'disablekb': 1,
-        'fs': 0,
-        'iv_load_policy': 3,
-        'modestbranding': 1,
-        'rel': 0,
-        'showinfo': 0
-      }
+      'videoId': videoIds[0]
     })
     , player2 = new YT.Player(players[1], {
       'height': resolution[1],
       'width': resolution[0],
-      'videoId': videoIds[1],
-      'events': {
-        'onChange': (event) => {
-          debugger
-          console.info(event)
-        }
-      },
-      'playerVars': {
-        'autoplay': 0,
-        'controls': 0,
-        'disablekb': 1,
-        'fs': 0,
-        'iv_load_policy': 3,
-        'modestbranding': 1,
-        'rel': 0,
-        'showinfo': 0
-      }
+      'videoId': videoIds[1]
     })
     , player3 = new YT.Player(players[2], {
       'height': resolution[1],
       'width': resolution[0],
-      'videoId': videoIds[2],
-      'events': {
-        'onChange': (event) => {
-          debugger
-          console.info(event)
-        }
-      },
-      'playerVars': {
-        'autoplay': 0,
-        'controls': 0,
-        'disablekb': 1,
-        'fs': 0,
-        'iv_load_policy': 3,
-        'modestbranding': 1,
-        'rel': 0,
-        'showinfo': 0
-      }
+      'videoId': videoIds[2]
     });
 
     player1.addEventListener('onReady', event => {
 
+      event.target.mute();
       event.target.seekTo(0);
-      event.target.pauseVideo();
     });
     player2.addEventListener('onReady', event => {
 
+      event.target.mute();
       event.target.seekTo(0);
-      event.target.pauseVideo();
     });
     player3.addEventListener('onReady', event => {
 
+      event.target.mute();
       event.target.seekTo(0);
-      event.target.pauseVideo();
     });
+
+
+    player1.addEventListener('onStateChange', event => {
+
+
+      console.info(event);
+    });
+    player2.addEventListener('onStateChange', event => {
+
+
+      console.info(event);
+    });
+    player3.addEventListener('onStateChange', event => {
+
+
+      console.info(event);
+    });
+
     playersStatuses.set(players[0], Object.assign({}, {
       'player': player1
     }));
