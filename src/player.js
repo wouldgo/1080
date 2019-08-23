@@ -1,9 +1,8 @@
 import {animation} from './interaction.js';
 
-let readySent = false
-  , playerFocused = -1
+let playerFocused = -1
   , isPlaying = false
-  , currentTime = 0;
+  , currentTime = -1;
 const playerElement = document.querySelector('.player')
   , bodyElement = document.querySelector('body')
   , resolution = [640, 480]
@@ -17,33 +16,20 @@ const playerElement = document.querySelector('.player')
     'xQLB3g0KqmY',
     'YERHP5wp_zw'
   ]
-  , playerVars = {
-    'autoplay': 1,
-    'controls': 1,
-    'disablekb': 0,
-    'fs': 0,
-    'iv_load_policy': 3,
-    'modestbranding': 1,
-    'rel': 0,
-    'showinfo': 0
-  }
   , playersStatuses = new Map()
-  , onReady = identifier => () => {
-    const thisStatus = playersStatuses.get(identifier);
-
-    if (!thisStatus.status) {
-
-      playersStatuses.set(identifier, Object.assign(thisStatus, {
-        'status': YT.PlayerState.UNSTARTED
-      }));
-    }
-  }
   , switchAudio = () => {
     const unFocused = players.filter(elm => elm !== players[playerFocused])
       , focusedPlayerSelector = `player-${playerFocused}`
       , focusedPlayer = playersStatuses.get(focusedPlayerSelector).player
       , focusedIframe = focusedPlayer.getIframe()
       , playerFocusedInElement = playerElement.querySelector(`#${focusedPlayerSelector}`);
+
+
+    unFocused
+      .map(aPlayerName => playersStatuses.get(aPlayerName))
+      .filter(elm => elm)
+      .map(elm => elm.player)
+      .forEach(elm => elm.pauseVideo());
 
     if (!isPlaying) {
 
@@ -63,26 +49,13 @@ const playerElement = document.querySelector('.player')
       focusedIframe.classList.add('visible');
     }
 
-    //console.info('play', focusedPlayerSelector, currentTime)
     focusedPlayer.playVideo();
-    focusedPlayer.seekTo(currentTime, true);
-
-    unFocused
-      .map(aPlayerName => playersStatuses.get(aPlayerName))
-      .map(elm => elm.player)
-      .forEach(elm => elm.pauseVideo());
   }
   , playerLoop = () => {
     const playersStatusesArray = Array.from(playersStatuses.entries());
 
     if (playersStatusesArray.length === players.length) {
-      const allAreReady = playersStatusesArray
-        .map(elm => elm[1])
-        .map(elm => elm.status)
-        .every(elm => elm === YT.PlayerState.UNSTARTED);
-
-      if (allAreReady &&
-        playerFocused !== -1 &&
+      if (playerFocused !== -1 &&
         isPlaying) {
         const player = playersStatuses.get(`player-${playerFocused}`).player
           , newTime = player.getCurrentTime();
@@ -91,19 +64,17 @@ const playerElement = document.querySelector('.player')
           if (newTime > currentTime) {
 
           currentTime = newTime;
+          playersStatusesArray.forEach(([, aStatus]) => {
+
+            aStatus.player.seekTo(currentTime);
+          });
+
           const currentTimeEvent = new window.CustomEvent('player:current-time', {
             'detail': currentTime
           });
 
           playerElement.dispatchEvent(currentTimeEvent);
         }
-      }
-
-      if (!readySent && allAreReady) {
-        const playerReady = new window.Event('player:ready');
-
-        readySent = true;
-        playerElement.dispatchEvent(playerReady);
       }
     }
   };
@@ -114,30 +85,81 @@ window.onYouTubeIframeAPIReady = () => {
       'height': resolution[1],
       'width': resolution[0],
       'videoId': videoIds[0],
-      playerVars,
       'events': {
-        'onReady': onReady(players[0])
+        'onChange': (event) => {
+          debugger
+          console.info(event)
+        }
+      },
+      'playerVars': {
+        'autoplay': 0,
+        'controls': 0,
+        'disablekb': 1,
+        'fs': 0,
+        'iv_load_policy': 3,
+        'modestbranding': 1,
+        'rel': 0,
+        'showinfo': 0
       }
     })
     , player2 = new YT.Player(players[1], {
       'height': resolution[1],
       'width': resolution[0],
       'videoId': videoIds[1],
-      playerVars,
       'events': {
-        'onReady': onReady(players[1])
+        'onChange': (event) => {
+          debugger
+          console.info(event)
+        }
+      },
+      'playerVars': {
+        'autoplay': 0,
+        'controls': 0,
+        'disablekb': 1,
+        'fs': 0,
+        'iv_load_policy': 3,
+        'modestbranding': 1,
+        'rel': 0,
+        'showinfo': 0
       }
     })
     , player3 = new YT.Player(players[2], {
       'height': resolution[1],
       'width': resolution[0],
       'videoId': videoIds[2],
-      playerVars,
       'events': {
-        'onReady': onReady(players[2])
+        'onChange': (event) => {
+          debugger
+          console.info(event)
+        }
+      },
+      'playerVars': {
+        'autoplay': 0,
+        'controls': 0,
+        'disablekb': 1,
+        'fs': 0,
+        'iv_load_policy': 3,
+        'modestbranding': 1,
+        'rel': 0,
+        'showinfo': 0
       }
     });
 
+    player1.addEventListener('onReady', event => {
+
+      event.target.seekTo(0);
+      event.target.pauseVideo();
+    });
+    player2.addEventListener('onReady', event => {
+
+      event.target.seekTo(0);
+      event.target.pauseVideo();
+    });
+    player3.addEventListener('onReady', event => {
+
+      event.target.seekTo(0);
+      event.target.pauseVideo();
+    });
     playersStatuses.set(players[0], Object.assign({}, {
       'player': player1
     }));

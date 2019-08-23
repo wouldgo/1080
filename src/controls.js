@@ -1,12 +1,7 @@
 import {nextVideo, prevVideo, play} from './player.js';
 
-let keyboardEnabled = false;
 const playerElement = document.querySelector('.player')
   , titleElement = document.querySelector('title')
-  , readyEventHandler = () => {
-
-    keyboardEnabled = true;
-  }
   , currentTimeEventHanlder = ({detail}) => {
     const [, ...rest] = titleElement.text.split(' - ');
 
@@ -31,19 +26,11 @@ const playerElement = document.querySelector('.player')
     ].join(' - ');
   };
 
-playerElement.addEventListener('player:ready', readyEventHandler, false);
 playerElement.addEventListener('player:current-time', currentTimeEventHanlder, false);
 document.addEventListener('interaction:fps', fpsEventHandler, false);
 
 document.addEventListener('keyup', event => {
   event.preventDefault();
-  if (!keyboardEnabled) {
-
-    /*eslint-disable no-console*/
-    console.info('Player not ready');
-    /*eslint-enable*/
-    return;
-  }
   const key = event.key || event.keyCode;
 
   if (key === ' ' || key === 32) { //Play

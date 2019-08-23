@@ -27,13 +27,11 @@ a, a:hover {
 }
 
 iframe {
-  visibility: hidden;
-  max-width: 0px;
-  max-height: 0px;
+  max-width: 1px;
+  max-height: 1px;
 }
 
 iframe.visible {
-  visibility: visible;
   max-width: inherit;
   max-height: inherit;
 }
