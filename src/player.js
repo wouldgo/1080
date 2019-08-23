@@ -35,7 +35,8 @@ const bodyElement = document.querySelector('body')
 
     if (!isPlaying) {
 
-      focusedPlayer.pauseVideo();
+      focusedPlayer.getIframe().classList.remove('visible');
+      focusedPlayer.mute();
       return;
     }
 
@@ -75,17 +76,44 @@ window.onYouTubeIframeAPIReady = () => {
   const player1 = new YT.Player(players[0], {
       'height': resolution[1],
       'width': resolution[0],
-      'videoId': videoIds[0]
+      'videoId': videoIds[0],
+      'playerVars': {
+        'controls': 0,
+        'disablekb': 1,
+        'fs': 0,
+        'iv_load_policy': 3,
+        'modestbranding': 1,
+        'rel': 0,
+        'showinfo': 0
+      }
     })
     , player2 = new YT.Player(players[1], {
       'height': resolution[1],
       'width': resolution[0],
-      'videoId': videoIds[1]
+      'videoId': videoIds[1],
+      'playerVars': {
+        'controls': 0,
+        'disablekb': 1,
+        'fs': 0,
+        'iv_load_policy': 3,
+        'modestbranding': 1,
+        'rel': 0,
+        'showinfo': 0
+      }
     })
     , player3 = new YT.Player(players[2], {
       'height': resolution[1],
       'width': resolution[0],
-      'videoId': videoIds[2]
+      'videoId': videoIds[2],
+      'playerVars': {
+        'controls': 0,
+        'disablekb': 1,
+        'fs': 0,
+        'iv_load_policy': 3,
+        'modestbranding': 1,
+        'rel': 0,
+        'showinfo': 0
+      }
     });
 
     player1.addEventListener('onReady', event => {
@@ -102,23 +130,6 @@ window.onYouTubeIframeAPIReady = () => {
 
       event.target.mute();
       event.target.seekTo(0);
-    });
-
-
-    player1.addEventListener('onStateChange', event => {
-
-
-      console.info(event);
-    });
-    player2.addEventListener('onStateChange', event => {
-
-
-      console.info(event);
-    });
-    player3.addEventListener('onStateChange', event => {
-
-
-      console.info(event);
     });
 
     playersStatuses.set(players[0], Object.assign({}, {
