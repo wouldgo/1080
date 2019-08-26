@@ -13,7 +13,7 @@ const bodyElement = document.querySelector('body')
   , videoIds = [
     'zk1us0NYfug',
     'xQLB3g0KqmY',
-    'YERHP5wp_zw'
+    'WytysbBr4AM'
   ]
   , playersStatuses = new Map()
   , switchAudio = () => {
