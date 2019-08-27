@@ -3,31 +3,11 @@ import {nextVideo, prevVideo, play} from './player.js';
 const bodyElement = document.querySelector('body')
   , titleElement = document.querySelector('title')
   , currentTimeEventHanlder = ({detail}) => {
-    const [, ...rest] = titleElement.text.split(' - ');
 
-    titleElement.text = [
-      [
-        'Time',
-        detail.toFixed(0)
-      ].join(': '),
-      ...rest
-    ].join(' - ');
-  }
-  , fpsEventHandler = ({detail}) => {
-    const [time, , ...rest] = titleElement.text.split(' - ');
-
-    titleElement.text = [
-      time,
-      [
-        'Fps: ',
-        detail
-      ].join(': '),
-      ...rest
-    ].join(' - ');
+    titleElement.text = `Time: ${detail}`;
   };
 
 bodyElement.addEventListener('player:current-time', currentTimeEventHanlder, false);
-document.addEventListener('interaction:fps', fpsEventHandler, false);
 
 document.addEventListener('keyup', event => {
   event.preventDefault();

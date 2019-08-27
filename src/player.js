@@ -28,15 +28,16 @@ const bodyElement = document.querySelector('body')
       .map(elm => elm.player)
       .map(elm => {
         elm.getIframe().classList.remove('visible');
+        elm.seekTo(currentTime, true);
 
         return elm;
       })
-      .forEach(elm => elm.mute());
+      .forEach(elm => elm.pauseVideo());
 
     if (!isPlaying) {
 
       focusedPlayer.getIframe().classList.remove('visible');
-      focusedPlayer.mute();
+      focusedPlayer.pauseVideo();
       return;
     }
 
@@ -47,7 +48,7 @@ const bodyElement = document.querySelector('body')
       focusedPlayer.seekTo(currentTime, true);
     }
 
-    focusedPlayer.unMute();
+    focusedPlayer.playVideo();
   }
   , playerLoop = () => {
     const playersStatusesArray = Array.from(playersStatuses.entries());
@@ -58,14 +59,27 @@ const bodyElement = document.querySelector('body')
         const player = playersStatuses.get(`player-${playerFocused}`).player
           , newTime = player.getCurrentTime();
 
-          if (newTime > currentTime) {
+        if (newTime > currentTime) {
+          const roundedSeconds = Math.round(newTime)
+            , diff = roundedSeconds - currentTime;
 
           currentTime = newTime;
-          const currentTimeEvent = new window.CustomEvent('player:current-time', {
-            'detail': currentTime
-          });
+          if (diff > 0) {
+            const currentTimeEvent = new window.CustomEvent('player:current-time', {
+              'detail': roundedSeconds
+            });
 
-          bodyElement.dispatchEvent(currentTimeEvent);
+            players.filter(elm => elm !== players[playerFocused])
+              .map(aPlayerName => playersStatuses.get(aPlayerName))
+              .filter(elm => elm)
+              .map(elm => elm.player)
+              .forEach(elm => {
+
+                elm.seekTo(currentTime, true);
+              });
+
+            bodyElement.dispatchEvent(currentTimeEvent);
+          }
         }
       }
     }
@@ -118,17 +132,17 @@ window.onYouTubeIframeAPIReady = () => {
 
     player1.addEventListener('onReady', event => {
 
-      event.target.mute();
+      event.target.pauseVideo();
       event.target.seekTo(0);
     });
     player2.addEventListener('onReady', event => {
 
-      event.target.mute();
+      event.target.pauseVideo();
       event.target.seekTo(0);
     });
     player3.addEventListener('onReady', event => {
 
-      event.target.mute();
+      event.target.pauseVideo();
       event.target.seekTo(0);
     });
 
