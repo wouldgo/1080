@@ -85,9 +85,6 @@ const bodyElement = document.querySelector('body')
 
           currentTime = newTime;
           if (diff > 0) {
-            const currentTimeEvent = new window.CustomEvent('player:current-time', {
-              'detail': roundedSeconds
-            });
 
             players.filter(elm => elm !== players[playerFocused])
               .map(aPlayerName => playersStatuses.get(aPlayerName))
@@ -97,8 +94,6 @@ const bodyElement = document.querySelector('body')
 
                 elm.seekTo(currentTime, true);
               });
-
-            bodyElement.dispatchEvent(currentTimeEvent);
           }
         }
       }
@@ -112,6 +107,7 @@ window.onYouTubeIframeAPIReady = () => {
       'width': resolution[0],
       'videoId': videoIds[0],
       'playerVars': {
+        'origin': document.domain,
         'controls': 0,
         'disablekb': 1,
         'fs': 0,
@@ -126,6 +122,7 @@ window.onYouTubeIframeAPIReady = () => {
       'width': resolution[0],
       'videoId': videoIds[1],
       'playerVars': {
+        'origin': document.domain,
         'controls': 0,
         'disablekb': 1,
         'fs': 0,
@@ -140,6 +137,7 @@ window.onYouTubeIframeAPIReady = () => {
       'width': resolution[0],
       'videoId': videoIds[2],
       'playerVars': {
+        'origin': document.domain,
         'controls': 0,
         'disablekb': 1,
         'fs': 0,
@@ -181,6 +179,17 @@ export const prevVideo = () => {
   return switchAudio();
 };
 
+export const restart = () => {
+  currentTime = -1;
+  players
+    .map(aPlayerName => playersStatuses.get(aPlayerName))
+    .filter(elm => elm)
+    .map(elm => elm.player)
+    .forEach(elm => {
+      elm.seekTo(0, true);
+    });
+};
+
 export const play = () => {
   let playStatus;
 
@@ -201,3 +210,5 @@ export const play = () => {
   bodyElement.dispatchEvent(playStatus);
   return switchAudio();
 };
+
+window.players = playersStatuses;

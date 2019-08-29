@@ -1,15 +1,11 @@
-import {nextVideo, prevVideo, play} from './player.js';
+import {nextVideo, prevVideo, play, restart} from './player.js';
 
 const bodyElement = document.querySelector('body')
-  , titleElement = document.querySelector('title')
   , prevElement = document.querySelector('.prev')
   , playElement = document.querySelector('.play')
   , pauseElement = document.querySelector('.pause')
+  , replayElement = document.querySelector('.replay')
   , nextElement = document.querySelector('.next');
-
-bodyElement.addEventListener('player:current-time', ({detail}) => {
-  titleElement.text = `Time: ${detail}`;
-}, false);
 
 bodyElement.addEventListener('player:ready', () => {
   playElement.classList.remove('hidden');
@@ -19,7 +15,7 @@ bodyElement.addEventListener('player:playing', () => {
 
   playElement.classList.add('hidden');
   pauseElement.classList.remove('hidden');
-
+  replayElement.classList.remove('hidden');
   prevElement.classList.remove('hidden');
   nextElement.classList.remove('hidden');
 });
@@ -27,7 +23,7 @@ bodyElement.addEventListener('player:paused', () => {
 
   playElement.classList.remove('hidden');
   pauseElement.classList.add('hidden');
-
+  replayElement.classList.add('hidden');
   prevElement.classList.add('hidden');
   nextElement.classList.add('hidden');
 });
@@ -42,6 +38,10 @@ playElement.addEventListener('click', () => {
 
 pauseElement.addEventListener('click', () => {
   return play();
+}, false);
+
+replayElement.addEventListener('click', () => {
+  return restart();
 }, false);
 
 nextElement.addEventListener('click', () => {
