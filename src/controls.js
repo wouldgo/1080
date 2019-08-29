@@ -2,29 +2,48 @@ import {nextVideo, prevVideo, play} from './player.js';
 
 const bodyElement = document.querySelector('body')
   , titleElement = document.querySelector('title')
-  , currentTimeEventHanlder = ({detail}) => {
+  , prevElement = document.querySelector('.prev')
+  , playElement = document.querySelector('.play')
+  , pauseElement = document.querySelector('.pause')
+  , nextElement = document.querySelector('.next');
 
-    titleElement.text = `Time: ${detail}`;
-  };
+bodyElement.addEventListener('player:current-time', ({detail}) => {
+  titleElement.text = `Time: ${detail}`;
+}, false);
 
-bodyElement.addEventListener('player:current-time', currentTimeEventHanlder, false);
+bodyElement.addEventListener('player:ready', () => {
+  playElement.classList.remove('hidden');
+}, false);
 
-document.addEventListener('keyup', event => {
-  event.preventDefault();
-  const key = event.key || event.keyCode;
+bodyElement.addEventListener('player:playing', () => {
 
-  if (key === ' ' || key === 32) { //Play
+  playElement.classList.add('hidden');
+  pauseElement.classList.remove('hidden');
 
-    return play();
-  } else if (key === 'ArrowRight' || key === 39) { //Next
-
-    return nextVideo();
-  } else if (key === 'ArrowLeft' || key === 37) { //Prev
-
-    return prevVideo();
-  }
-
-  /*eslint-disable no-console*/
-  console.info(event.key, event.keyCode);
-  /*eslint-enable*/
+  prevElement.classList.remove('hidden');
+  nextElement.classList.remove('hidden');
 });
+bodyElement.addEventListener('player:paused', () => {
+
+  playElement.classList.remove('hidden');
+  pauseElement.classList.add('hidden');
+
+  prevElement.classList.add('hidden');
+  nextElement.classList.add('hidden');
+});
+
+prevElement.addEventListener('click', () => {
+  return prevVideo();
+}, false);
+
+playElement.addEventListener('click', () => {
+  return play();
+}, false);
+
+pauseElement.addEventListener('click', () => {
+  return play();
+}, false);
+
+nextElement.addEventListener('click', () => {
+  return nextVideo();
+}, false);

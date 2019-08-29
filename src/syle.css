@@ -12,8 +12,23 @@ body {
   border: 0;
 
   display: grid;
-  grid-template-columns: [left-border] 5px [players] auto [rigth-border] 5px;
+  grid-template-columns: [left-border] 30px [players] auto [rigth-border] 30px;
   justify-items: center;
+  align-items: center;
+}
+
+.material-icons {
+  cursor: pointer;
+}
+
+.material-icons.md-48 {
+  font-size: 48px;
+}
+
+.viewport {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 .player {
@@ -34,4 +49,8 @@ iframe {
 iframe.visible {
   max-width: inherit;
   max-height: inherit;
+}
+
+.hidden {
+  display: none !important;
 }

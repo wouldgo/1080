@@ -1,6 +1,7 @@
 import {animation} from './interaction.js';
 
-let playerFocused = -1
+let isReady = false
+  , playerFocused = -1
   , isPlaying = false
   , currentTime = -1;
 const bodyElement = document.querySelector('body')
@@ -28,7 +29,13 @@ const bodyElement = document.querySelector('body')
       .map(elm => elm.player)
       .map(elm => {
         elm.getIframe().classList.remove('visible');
-        elm.seekTo(currentTime, true);
+        if (currentTime < 0) {
+
+          elm.seekTo(1, true);
+        } else {
+
+          elm.seekTo(currentTime, true);
+        }
 
         return elm;
       })
@@ -54,6 +61,19 @@ const bodyElement = document.querySelector('body')
     const playersStatusesArray = Array.from(playersStatuses.entries());
 
     if (playersStatusesArray.length === players.length) {
+
+      const everyReady = playersStatusesArray
+        .map(([, {player}]) => player)
+        .every(player => player.getPlayerState);
+
+      if (!isReady &&
+        everyReady) {
+        isReady = true;
+        const videoReady = new window.Event('player:ready');
+
+        bodyElement.dispatchEvent(videoReady);
+      }
+
       if (playerFocused !== -1 &&
         isPlaying) {
         const player = playersStatuses.get(`player-${playerFocused}`).player
@@ -130,22 +150,6 @@ window.onYouTubeIframeAPIReady = () => {
       }
     });
 
-    player1.addEventListener('onReady', event => {
-
-      event.target.pauseVideo();
-      event.target.seekTo(0);
-    });
-    player2.addEventListener('onReady', event => {
-
-      event.target.pauseVideo();
-      event.target.seekTo(0);
-    });
-    player3.addEventListener('onReady', event => {
-
-      event.target.pauseVideo();
-      event.target.seekTo(0);
-    });
-
     playersStatuses.set(players[0], Object.assign({}, {
       'player': player1
     }));
@@ -178,18 +182,22 @@ export const prevVideo = () => {
 };
 
 export const play = () => {
+  let playStatus;
 
   if (isPlaying) {
 
     isPlaying = false;
+    playStatus = new window.Event('player:paused');
   } else {
 
     isPlaying = true;
+    playStatus = new window.Event('player:playing');
     if (playerFocused === -1) {
 
       playerFocused = 0;
     }
   }
 
+  bodyElement.dispatchEvent(playStatus);
   return switchAudio();
 };

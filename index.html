@@ -3,17 +3,28 @@
   <head>
     <title></title>
     <link href="src/syle.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
   <body>
-    <div></div>
-
     <div>
-      <div id="player-0"></div>
-      <div id="player-1"></div>
-      <div id="player-2"></div>
+      <i class="material-icons md-48 prev hidden">arrow_back</i>
     </div>
 
-    <div></div>
+    <div class="viewport">
+      <div>
+        <div id="player-0"></div>
+        <div id="player-1"></div>
+        <div id="player-2"></div>
+      </div>
+      <div>
+        <i class="material-icons md-48 play hidden">play_arrow</i>
+        <i class="material-icons md-48 pause hidden">pause_circle_filled</i>
+      </div>
+    </div>
+
+    <div>
+      <i class="material-icons md-48 next hidden">arrow_forward</i>
+    </div>
 
     <script src="src/interaction.js" type="module"></script>
     <script src="src/player.js" type="module"></script>
