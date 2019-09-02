@@ -31,9 +31,41 @@ body {
   flex-direction: column;
 }
 
+.viewport .banner {
+  font-size: 1.5rem;
+  display: grid;
+  grid-template-columns: [banner-left] 5% [banner-text] auto [banner-rigth] 5% [banner-end];
+  justify-items: center;
+  align-items: center;
+}
+
+.viewport .text {
+  padding-bottom: 2rem;
+}
+
+.viewport .text div {
+  padding: 0.5rem 0 0;
+}
+
+.viewport .logos {
+  grid-column-start: banner-left;
+  grid-column-end: banner-end;
+
+  display: flex;
+  align-items: center;
+}
+
+.viewport .banner.hidden {
+  display: none;
+}
+
 .viewport .controls {
   display: flex;
   justify-content: space-between;
+}
+
+.viewport .controls.paused {
+  justify-content: center;
 }
 
 .player {

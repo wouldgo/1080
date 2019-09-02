@@ -5,6 +5,7 @@
       1080
     </title>
     <link href="src/syle.css" rel="stylesheet" type="text/css">
+    <link href="./node_modules/@material/linear-progress/dist/mdc.linear-progress.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
   <body>
@@ -14,10 +15,42 @@
 
     <div class="viewport">
       <div>
+        <div class="banner hidden">
+          <div></div>
+          <div class="text">
+            <div>"Una furtiva lagrima" | <i>L'elisir d'amore</i> (1832)</div>
+            <div>Musica: Gaetano Donizzetti</div>
+            <div>Libretto: Felice Romani</div>
+            <div></div>
+            <div>Orchestra e Coro del Maggio Musicale Fiorentino</div>
+            <div>Maestro concertatore e direttore: Fabrizio Maria Carminati</div>
+            <div>Regia: Pier Francesco Maestrini</div>
+            <div>Teatro del Maggio Musicale Fiorentino, 4 luglio 2019</div>
+            <div>360° video</div>
+          </div>
+          <div></div>
+
+          <div class="logos">
+              <img src="./resources/sagas.png">
+              <img src="./resources/maggio.png">
+              <img src="./resources/mezzoforte.png">
+            </div>
+        </div>
+
         <div id="player-0"></div>
         <div id="player-1"></div>
         <div id="player-2"></div>
       </div>
+      <div role="progressbar" class="mdc-linear-progress hidden">
+          <div class="mdc-linear-progress__buffering-dots"></div>
+          <div class="mdc-linear-progress__buffer"></div>
+          <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+            <span class="mdc-linear-progress__bar-inner"></span>
+          </div>
+          <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+            <span class="mdc-linear-progress__bar-inner"></span>
+          </div>
+        </div>
       <div class="controls">
         <i class="material-icons md-3-rem replay hidden">skip_previous</i>
         <i class="material-icons md-3-rem play hidden">play_arrow</i>
@@ -32,6 +65,7 @@
     <script src="src/interaction.js" type="module"></script>
     <script src="src/player.js" type="module"></script>
     <script src="src/controls.js" type="module"></script>
+    <script src="./node_modules/@material/linear-progress/dist/mdc.linearProgress.min.js"></script>
     <script src="https://www.youtube.com/iframe_api"></script>
   </body>
 </html>

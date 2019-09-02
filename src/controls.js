@@ -1,17 +1,32 @@
+/*global mdc*/
 import {nextVideo, prevVideo, play, restart} from './player.js';
 
 const bodyElement = document.querySelector('body')
+  , bannerElement = document.querySelector('.banner')
+  , controlsElement = document.querySelector('.controls')
   , prevElement = document.querySelector('.prev')
   , playElement = document.querySelector('.play')
   , pauseElement = document.querySelector('.pause')
   , replayElement = document.querySelector('.replay')
-  , nextElement = document.querySelector('.next');
+  , nextElement = document.querySelector('.next')
+  , progressElement = document.querySelector('.mdc-linear-progress')
+  , linearProgress = new mdc.linearProgress.MDCLinearProgress(progressElement);
+
+bodyElement.addEventListener('player:time', event => {
+  linearProgress.buffer = event.detail;
+}, false);
 
 bodyElement.addEventListener('player:ready', () => {
+
   playElement.classList.remove('hidden');
+  bannerElement.classList.remove('hidden');
+  controlsElement.classList.add('paused');
 }, false);
 
 bodyElement.addEventListener('player:playing', () => {
+  controlsElement.classList.remove('paused');
+  progressElement.classList.remove('hidden');
+  bannerElement.classList.add('hidden');
 
   playElement.classList.add('hidden');
   pauseElement.classList.remove('hidden');
@@ -20,6 +35,9 @@ bodyElement.addEventListener('player:playing', () => {
   nextElement.classList.remove('hidden');
 });
 bodyElement.addEventListener('player:paused', () => {
+  controlsElement.classList.add('paused');
+  progressElement.classList.add('hidden');
+  bannerElement.classList.remove('hidden');
 
   playElement.classList.remove('hidden');
   pauseElement.classList.add('hidden');

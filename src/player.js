@@ -3,18 +3,19 @@ import {animation} from './interaction.js';
 let isReady = false
   , playerFocused = -1
   , isPlaying = false
-  , currentTime = -1;
+  , currentTime = -1
+  , maxDuration = -1;
 const bodyElement = document.querySelector('body')
-  , resolution = [800, 600]
+  , resolution = [1024, 768]
   , players = [
     'player-0',
     'player-1',
     'player-2'
   ]
   , videoIds = [
-    'zk1us0NYfug',
-    'xQLB3g0KqmY',
-    'WytysbBr4AM'
+    'FT3nzUgg7Dc',
+    'BKrvWejrJtA',
+    'bC02qDo9E3I'
   ]
   , playersStatuses = new Map()
   , switchAudio = () => {
@@ -86,6 +87,12 @@ const bodyElement = document.querySelector('body')
           currentTime = newTime;
           if (diff > 0) {
 
+            const bufferValue = (currentTime / maxDuration)
+              , timeEvent = new window.CustomEvent('player:time', {
+                'detail': bufferValue
+              });
+
+            bodyElement.dispatchEvent(timeEvent);
             players.filter(elm => elm !== players[playerFocused])
               .map(aPlayerName => playersStatuses.get(aPlayerName))
               .filter(elm => elm)
@@ -145,6 +152,37 @@ window.onYouTubeIframeAPIReady = () => {
         'modestbranding': 1,
         'rel': 0,
         'showinfo': 0
+      }
+    });
+
+    player1.addEventListener('onReady', event => {
+      const thisPlayer = event.target
+        , thisDuration = thisPlayer.getDuration();
+
+      thisPlayer.setPlaybackQuality('hd1080');
+      if (thisDuration > maxDuration) {
+
+        maxDuration = thisDuration;
+      }
+    });
+    player2.addEventListener('onReady', event => {
+      const thisPlayer = event.target
+        , thisDuration = thisPlayer.getDuration();
+
+      thisPlayer.setPlaybackQuality('hd1080');
+      if (thisDuration > maxDuration) {
+
+        maxDuration = thisDuration;
+      }
+    });
+    player3.addEventListener('onReady', event => {
+      const thisPlayer = event.target
+        , thisDuration = thisPlayer.getDuration();
+
+      thisPlayer.setPlaybackQuality('hd1080');
+      if (thisDuration > maxDuration) {
+
+        maxDuration = thisDuration;
       }
     });
 
