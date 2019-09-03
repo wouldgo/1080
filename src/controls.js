@@ -4,6 +4,7 @@ import {nextVideo, prevVideo, play, restart} from './player.js';
 const bodyElement = document.querySelector('body')
   , bannerElement = document.querySelector('.banner')
   , controlsElement = document.querySelector('.controls')
+  , loadingElement = document.querySelector('.loading')
   , prevElement = document.querySelector('.prev')
   , playElement = document.querySelector('.play')
   , pauseElement = document.querySelector('.pause')
@@ -12,15 +13,20 @@ const bodyElement = document.querySelector('body')
   , progressElement = document.querySelector('.mdc-linear-progress')
   , linearProgress = new mdc.linearProgress.MDCLinearProgress(progressElement);
 
+document.addEventListener('DOMContentLoaded', () => {
+  bannerElement.classList.remove('hidden');
+}, false);
+
 bodyElement.addEventListener('player:time', event => {
   linearProgress.buffer = event.detail;
 }, false);
 
 bodyElement.addEventListener('player:ready', () => {
+  loadingElement.classList.add('hidden');
 
+  controlsElement.classList.add('paused');
   playElement.classList.remove('hidden');
   bannerElement.classList.remove('hidden');
-  controlsElement.classList.add('paused');
 }, false);
 
 bodyElement.addEventListener('player:playing', () => {

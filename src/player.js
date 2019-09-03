@@ -87,12 +87,6 @@ const bodyElement = document.querySelector('body')
           currentTime = newTime;
           if (diff > 0) {
 
-            const bufferValue = (currentTime / maxDuration)
-              , timeEvent = new window.CustomEvent('player:time', {
-                'detail': bufferValue
-              });
-
-            bodyElement.dispatchEvent(timeEvent);
             players.filter(elm => elm !== players[playerFocused])
               .map(aPlayerName => playersStatuses.get(aPlayerName))
               .filter(elm => elm)
@@ -108,6 +102,17 @@ const bodyElement = document.querySelector('body')
   };
 
 animation(playerLoop);
+setInterval(() => {
+  if (playerFocused !== -1) {
+    const player = playersStatuses.get(`player-${playerFocused}`).player
+      , bufferValue = (player.getCurrentTime() / maxDuration)
+      , timeEvent = new window.CustomEvent('player:time', {
+        'detail': Math.abs(Number(bufferValue.toFixed(2)))
+      });
+
+    bodyElement.dispatchEvent(timeEvent);
+  }
+}, 2000);
 window.onYouTubeIframeAPIReady = () => {
   const player1 = new YT.Player(players[0], {
       'height': resolution[1],
@@ -160,6 +165,8 @@ window.onYouTubeIframeAPIReady = () => {
         , thisDuration = thisPlayer.getDuration();
 
       thisPlayer.setPlaybackQuality('hd1080');
+      thisPlayer.mute();
+      thisPlayer.playVideo();
       if (thisDuration > maxDuration) {
 
         maxDuration = thisDuration;
@@ -170,6 +177,8 @@ window.onYouTubeIframeAPIReady = () => {
         , thisDuration = thisPlayer.getDuration();
 
       thisPlayer.setPlaybackQuality('hd1080');
+      thisPlayer.mute();
+      thisPlayer.playVideo();
       if (thisDuration > maxDuration) {
 
         maxDuration = thisDuration;
@@ -180,21 +189,59 @@ window.onYouTubeIframeAPIReady = () => {
         , thisDuration = thisPlayer.getDuration();
 
       thisPlayer.setPlaybackQuality('hd1080');
+      thisPlayer.mute();
+      thisPlayer.playVideo();
       if (thisDuration > maxDuration) {
 
         maxDuration = thisDuration;
       }
     });
 
-    playersStatuses.set(players[0], Object.assign({}, {
-      'player': player1
-    }));
-    playersStatuses.set(players[1], Object.assign({}, {
-      'player': player2
-    }));
-    playersStatuses.set(players[2], Object.assign({}, {
-      'player': player3
-    }));
+    player1.addEventListener('onStateChange', event => {
+      const newState = event.data
+        , thisPlayer = event.target;
+
+      if (currentTime === -1 &&
+        playerFocused === -1 &&
+        newState === YT.PlayerState.PLAYING) {
+
+        thisPlayer.pauseVideo();
+        thisPlayer.unMute();
+        playersStatuses.set(players[0], Object.assign({}, {
+          'player': player1
+        }));
+      }
+    });
+    player2.addEventListener('onStateChange', event => {
+      const newState = event.data
+        , thisPlayer = event.target;
+
+      if (currentTime === -1 &&
+        playerFocused === -1 &&
+        newState === YT.PlayerState.PLAYING) {
+
+        thisPlayer.pauseVideo();
+        thisPlayer.unMute();
+      }
+      playersStatuses.set(players[1], Object.assign({}, {
+        'player': player2
+      }));
+    });
+    player3.addEventListener('onStateChange', event => {
+      const newState = event.data
+        , thisPlayer = event.target;
+
+      if (currentTime === -1 &&
+        playerFocused === -1 &&
+        newState === YT.PlayerState.PLAYING) {
+
+        thisPlayer.pauseVideo();
+        thisPlayer.unMute();
+      }
+      playersStatuses.set(players[2], Object.assign({}, {
+        'player': player3
+      }));
+    });
 };
 
 export const nextVideo = () => {
@@ -219,6 +266,11 @@ export const prevVideo = () => {
 
 export const restart = () => {
   currentTime = -1;
+  const timeEvent = new window.CustomEvent('player:time', {
+    'detail': 0
+  });
+
+  bodyElement.dispatchEvent(timeEvent);
   players
     .map(aPlayerName => playersStatuses.get(aPlayerName))
     .filter(elm => elm)
