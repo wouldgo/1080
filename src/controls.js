@@ -13,12 +13,29 @@ const bodyElement = document.querySelector('body')
   , progressElement = document.querySelector('.mdc-linear-progress')
   , linearProgress = new mdc.linearProgress.MDCLinearProgress(progressElement);
 
+progressElement.addEventListener('click', event => {
+  /*eslint-disable id-length*/
+  const {x} = event
+  /*eslint-enable*/
+    , width = progressElement.clientWidth
+    , left = progressElement.getBoundingClientRect().left
+    , proportion = (x - left) / width
+    , postionEvent = new window.CustomEvent('controls:skipTo', {
+      'detail': proportion
+    });
+
+  bodyElement.dispatchEvent(postionEvent);
+}, false);
+
 document.addEventListener('DOMContentLoaded', () => {
   bannerElement.classList.remove('hidden');
 }, false);
 
 bodyElement.addEventListener('player:time', event => {
-  linearProgress.buffer = event.detail;
+  const {buffer, progress} = event.detail;
+
+  linearProgress.buffer = buffer;
+  linearProgress.progress = progress;
 }, false);
 
 bodyElement.addEventListener('player:ready', () => {

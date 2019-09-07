@@ -3,6 +3,8 @@ html {
   background-color: black;
   color: beige;
   font-family: Arial, Helvetica, sans-serif;
+
+  --mdc-theme-primary: #359c5f;
 }
 
 body {
@@ -107,6 +109,10 @@ iframe.visible {
 .player {
   max-width: 1024px;
   max-height: 768px;
+}
+
+.mdc-linear-progress {
+  height: 1rem !important;
 }
 
 .loading {
