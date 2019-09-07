@@ -9,7 +9,7 @@ let firstIsReady = false
   , maxDuration = -1;
 const bodyElement = document.querySelector('body')
   , resolution = [1024, 768]
-  , secondsUpdateInterval = 3
+  , secondsUpdateInterval = 2
   , players = [
     'player-0',
     'player-1',
@@ -169,10 +169,16 @@ window.onYouTubeIframeAPIReady = () => {
 
           bodyElement.dispatchEvent(videoReady);
         }
+      } else if (currentTime === -1 &&
+        playerFocused === -1) {
+
+        playersStatuses.set(players[0], Object.assign({}, {
+          'player': player1
+        }));
+      } else {
+
+        console.info('1', event.data);
       }
-      playersStatuses.set(players[0], Object.assign({}, {
-        'player': player1
-      }));
     });
 
     player2.addEventListener('onReady', event => {
@@ -205,10 +211,16 @@ window.onYouTubeIframeAPIReady = () => {
 
           bodyElement.dispatchEvent(videoReady);
         }
+      } else if (currentTime === -1 &&
+        playerFocused === -1) {
+
+        playersStatuses.set(players[1], Object.assign({}, {
+          'player': player2
+        }));
+      } else {
+
+        console.info('2', event.data);
       }
-      playersStatuses.set(players[1], Object.assign({}, {
-        'player': player2
-      }));
     });
 
     player3.addEventListener('onReady', event => {
@@ -241,10 +253,16 @@ window.onYouTubeIframeAPIReady = () => {
 
           bodyElement.dispatchEvent(videoReady);
         }
+      } else if (currentTime === -1 &&
+        playerFocused === -1) {
+
+        playersStatuses.set(players[2], Object.assign({}, {
+          'player': player3
+        }));
+      } else {
+
+        console.info('3', event.data);
       }
-      playersStatuses.set(players[2], Object.assign({}, {
-        'player': player3
-      }));
     });
 };
 
