@@ -1,4 +1,5 @@
 html {
+  text-size-adjust: 100%;
   background-color: black;
   color: beige;
   font-family: Arial, Helvetica, sans-serif;
@@ -15,6 +16,19 @@ body {
   grid-template-columns: [left-border] 5% [players] auto [rigth-border] 5%;
   justify-items: center;
   align-items: center;
+}
+
+img {
+  max-width: 50%;
+  height: 50%;
+}
+
+@media screen and (min-width: 1450px) {
+
+  img {
+    max-width: inherit;
+    height: inherit;
+  }
 }
 
 a, a:hover {
@@ -43,9 +57,9 @@ iframe.visible {
 
 .spin {
   animation-name: spin;
-  animation-duration: 4000ms;
+  animation-duration: 1000ms;
   animation-iteration-count: infinite;
-  animation-timing-function: linear;
+  animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 
 .material-icons {
@@ -54,12 +68,6 @@ iframe.visible {
 
 .material-icons.md-3-rem {
   font-size: 3rem;
-}
-
-.viewport {
-  display: flex;
-  align-items: stretch;
-  flex-direction: column;
 }
 
 .viewport .banner {
@@ -81,9 +89,10 @@ iframe.visible {
 .viewport .logos {
   grid-column-start: banner-left;
   grid-column-end: banner-end;
+}
 
-  display: flex;
-  align-items: center;
+.viewport .logos div {
+  text-align: center;
 }
 
 .viewport .controls {
@@ -96,8 +105,8 @@ iframe.visible {
 }
 
 .player {
-  min-width: 1024px;
-  min-height: 768px;
+  max-width: 1024px;
+  max-height: 768px;
 }
 
 .loading {
