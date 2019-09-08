@@ -56,6 +56,11 @@ bodyElement.addEventListener('player:playing', () => {
   replayElement.classList.remove('hidden');
   prevElement.classList.remove('hidden');
   nextElement.classList.remove('hidden');
+
+  prevElement.innerHTML = 'arrow_back';
+  prevElement.classList.remove('spin');
+  nextElement.innerHTML = 'arrow_forward';
+  nextElement.classList.remove('spin');
 });
 bodyElement.addEventListener('player:paused', () => {
   controlsElement.classList.add('paused');
@@ -70,6 +75,13 @@ bodyElement.addEventListener('player:paused', () => {
 });
 
 prevElement.addEventListener('click', () => {
+  if (prevElement.innerHTML === 'refresh') {
+
+    return;
+  }
+  prevElement.innerHTML = 'refresh';
+  prevElement.classList.add('spin');
+
   return prevVideo();
 }, false);
 
@@ -86,5 +98,12 @@ replayElement.addEventListener('click', () => {
 }, false);
 
 nextElement.addEventListener('click', () => {
+  if (nextElement.innerHTML === 'refresh') {
+
+    return;
+  }
+  nextElement.innerHTML = 'refresh';
+  nextElement.classList.add('spin');
+
   return nextVideo();
 }, false);

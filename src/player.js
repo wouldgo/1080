@@ -8,7 +8,7 @@ let firstIsReady = false
   , currentTime = -1
   , maxDuration = -1;
 const bodyElement = document.querySelector('body')
-  , resolution = [1024, 768]
+  , resolution = [800, 600]
   , secondsUpdateInterval = 1
   , players = [
     'player-0',
