@@ -205,6 +205,7 @@ window.onYouTubeIframeAPIReady = () => {
           , playStatus = new window.Event('player:playing');
 
         oldPlayer.pauseVideo();
+        thisPlayer.seekTo(currentTime, true);
         thisPlayer.unMute();
 
         oldPlayer.getIframe().classList.remove('visible');
@@ -269,6 +270,7 @@ window.onYouTubeIframeAPIReady = () => {
           , playStatus = new window.Event('player:playing');
 
         oldPlayer.pauseVideo();
+        thisPlayer.seekTo(currentTime, true);
         thisPlayer.unMute();
 
         oldPlayer.getIframe().classList.remove('visible');
@@ -333,6 +335,7 @@ window.onYouTubeIframeAPIReady = () => {
           , playStatus = new window.Event('player:playing');
 
         oldPlayer.pauseVideo();
+        thisPlayer.seekTo(currentTime, true);
         thisPlayer.unMute();
 
         oldPlayer.getIframe().classList.remove('visible');
