@@ -15,7 +15,7 @@ body {
   border: 0;
 
   display: grid;
-  grid-template-columns: [left-border] 5% [players] auto [rigth-border] 5%;
+  grid-template-columns: [left-border] auto [players] 800px [rigth-border] auto;
   justify-items: center;
   align-items: center;
 }
@@ -80,6 +80,19 @@ iframe.visible {
   align-items: center;
 }
 
+.arrow-left {
+  justify-self: right;
+}
+
+.arrow-right {
+  justify-self: left;
+}
+
+.player {
+  max-width: 800px;
+  max-height: 600px;
+}
+
 .viewport .text {
   padding-bottom: 2rem;
 }
@@ -104,11 +117,6 @@ iframe.visible {
 
 .viewport .controls.paused {
   justify-content: center;
-}
-
-.player {
-  max-width: 800px;
-  max-height: 600px;
 }
 
 .mdc-linear-progress {
