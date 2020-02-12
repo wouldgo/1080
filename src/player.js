@@ -16,9 +16,9 @@ const bodyElement = document.querySelector('body')
     'player-2'
   ]
   , videoIds = [
-    'FT3nzUgg7Dc',
-    'BKrvWejrJtA',
-    'bC02qDo9E3I'
+    'eG40LruCHUg', //'FT3nzUgg7Dc',
+    'IxC_HrXo5mk', //'BKrvWejrJtA',
+    'IR60mlkSiwo' //'bC02qDo9E3I'
   ]
   , playersStatuses = new Map()
   , playerLoop = () => {
