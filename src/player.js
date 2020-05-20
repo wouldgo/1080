@@ -16,9 +16,9 @@ const bodyElement = document.querySelector('body')
     'player-2'
   ]
   , videoIds = [
-    'eG40LruCHUg', //'FT3nzUgg7Dc',
-    'IxC_HrXo5mk', //'BKrvWejrJtA',
-    'IR60mlkSiwo' //'bC02qDo9E3I'
+    'C_wHUR7mc_Y', //'eG40LruCHUg', //'FT3nzUgg7Dc',
+    'uuMG-GQWTJA', //'IxC_HrXo5mk', //'BKrvWejrJtA',
+    '0RiIgoTuzAg'//'IR60mlkSiwo' //'bC02qDo9E3I'
   ]
   , playersStatuses = new Map()
   , playerLoop = () => {
