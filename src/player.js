@@ -30,12 +30,14 @@ const bodyElement = document.querySelector('body')
 
       currentTime = newTime;
       if (roundedSeconds % secondsUpdateInterval === 0) {
-        const progressValue = (player.getCurrentTime() / maxDuration)
+        const progressValue = (newTime / maxDuration)
           , buffer = player.getVideoLoadedFraction()
           , timeEvent = new window.CustomEvent('player:time', {
             'detail': {
               buffer,
-              'progress': Math.abs(Number(progressValue.toFixed(2)))
+              'progress': Math.abs(Number(progressValue.toFixed(2))),
+              'currentTime': roundedSeconds,
+              'duration': maxDuration
             }
           });
 

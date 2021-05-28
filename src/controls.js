@@ -11,7 +11,26 @@ const bodyElement = document.querySelector('body')
   , replayElement = document.querySelector('.replay')
   , nextElement = document.querySelector('.next')
   , progressElement = document.querySelector('.mdc-linear-progress')
-  , linearProgress = new mdc.linearProgress.MDCLinearProgress(progressElement);
+  , timeElement = document.querySelector('.time')
+  , linearProgress = new mdc.linearProgress.MDCLinearProgress(progressElement)
+  , formatTime = function format(time) {
+      // Hours, minutes and seconds
+      /* eslint-disable no-bitwise */
+      const hrs = ~~(time / 3600)
+        , mins = ~~((time % 3600) / 60)
+        , secs = ~~time % 60;
+      /* eslint-enable */
+
+      let ret = '';
+
+      if (hrs > 0) {
+        ret += `${String(hrs) }:${ mins < 10 ? '0' : ''}`;
+      }
+      ret += `${String(mins) }:${ secs < 10 ? '0' : ''}`;
+      ret += `${ secs}`;
+      return ret;
+    };
+
 
 progressElement.addEventListener('click', event => {
   /*eslint-disable id-length*/
@@ -32,8 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
 }, false);
 
 bodyElement.addEventListener('player:time', event => {
-  const {buffer, progress} = event.detail;
+  const {buffer, progress, currentTime, duration} = event.detail;
 
+  timeElement.innerHTML = [formatTime(currentTime), formatTime(duration)].join(' / ');
   linearProgress.buffer = buffer;
   linearProgress.progress = progress;
 }, false);
@@ -49,6 +69,7 @@ bodyElement.addEventListener('player:ready', () => {
 bodyElement.addEventListener('player:playing', () => {
   controlsElement.classList.remove('paused');
   progressElement.classList.remove('hidden');
+  timeElement.classList.remove('hidden');
   bannerElement.classList.add('hidden');
 
   playElement.classList.add('hidden');
@@ -65,6 +86,7 @@ bodyElement.addEventListener('player:playing', () => {
 bodyElement.addEventListener('player:paused', () => {
   controlsElement.classList.add('paused');
   progressElement.classList.add('hidden');
+  timeElement.classList.add('hidden');
   bannerElement.classList.remove('hidden');
 
   playElement.classList.remove('hidden');

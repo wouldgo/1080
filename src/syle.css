@@ -72,6 +72,12 @@ iframe.visible {
   font-size: 3rem;
 }
 
+.viewport .time {
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 0 0 0.5rem;
+}
+
 .viewport .banner {
   font-size: 1.5rem;
   display: grid;
