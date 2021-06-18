@@ -9,35 +9,34 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
   <body>
-    <div class="arrow-left">
-      <i class="material-icons md-3-rem prev hidden">arrow_back</i>
+    <div id="banner" class="hidden">
+      <div class="text">
+        <div>"Una furtiva lagrima" | <i>L'elisir d'amore</i> (1832)</div>
+        <div>Musica: Gaetano Donizetti</div>
+        <div>Libretto: Felice Romani</div>
+        <div></div>
+        <div>Orchestra e Coro del Maggio Musicale Fiorentino</div>
+        <div>Maestro concertatore e direttore: Fabrizio Maria Carminati</div>
+        <div>Regia: Pier Francesco Maestrini</div>
+        <div>Teatro del Maggio Musicale Fiorentino, 4 luglio 2019</div>
+        <div>360&deg; video</div>
+      </div>
+      <img class="logos" src="./resources/front.png">
+      <div class="loading">
+        <i class="material-icons md-3-rem wait-pls spin">gamepad</i>
+        <i class="material-icons md-3-rem play hidden">play_arrow</i>
+      </div>
     </div>
+    <div id="video" class="hidden">
+      <div class="arrow-left">
+        <i class="material-icons md-3-rem prev hidden">arrow_back</i>
+      </div>
+      <div class="arrow-right">
+        <i class="material-icons md-3-rem next hidden">arrow_forward</i>
+      </div>
 
-    <div class="viewport">
       <div class="time hidden">#</div>
-      <div>
-        <div class="banner hidden">
-          <div></div>
-          <div class="text">
-            <div>"Una furtiva lagrima" | <i>L'elisir d'amore</i> (1832)</div>
-            <div>Musica: Gaetano Donizetti</div>
-            <div>Libretto: Felice Romani</div>
-            <div></div>
-            <div>Orchestra e Coro del Maggio Musicale Fiorentino</div>
-            <div>Maestro concertatore e direttore: Fabrizio Maria Carminati</div>
-            <div>Regia: Pier Francesco Maestrini</div>
-            <div>Teatro del Maggio Musicale Fiorentino, 4 luglio 2019</div>
-            <div>360° video</div>
-          </div>
-          <div></div>
-
-          <div class="logos">
-            <div>
-              <img src="./resources/front.png">
-            </div>
-          </div>
-        </div>
-
+      <div class="player">
         <div id="player-0"></div>
         <div id="player-1"></div>
         <div id="player-2"></div>
@@ -57,15 +56,10 @@
         <i class="material-icons md-3-rem play hidden">play_arrow</i>
         <i class="material-icons md-3-rem pause hidden">pause_circle_filled</i>
       </div>
-      <div class="loading">
-        <i class="material-icons md-3-rem spin">gamepad</i>
-      </div>
     </div>
-
-    <div class="arrow-right">
-      <i class="material-icons md-3-rem next hidden">arrow_forward</i>
+    <div id="loading">
+      <i class="material-icons md-3-rem spin">gamepad</i>
     </div>
-
     <script src="src/interaction.js" type="module"></script>
     <script src="src/player.js" type="module"></script>
     <script src="src/controls.js" type="module"></script>

@@ -1,0 +1,65 @@
+
+iframe {
+  max-width: 0px;
+  max-height: 0px;
+}
+
+iframe.visible {
+  max-width: inherit;
+  max-height: inherit;
+}
+
+.banner .text {
+  padding-bottom: 2rem;
+}
+
+.banner .text div {
+  padding: 0.5rem 0 0;
+}
+
+.banner .logos {
+  grid-column-start: banner-left;
+  grid-column-end: banner-end;
+}
+
+.banner .logos div {
+  text-align: center;
+}
+
+.viewport {
+  display: grid;
+  grid-template-columns: [left-border] auto [players] 800px [rigth-border] auto;
+  justify-items: center;
+  align-items: center;
+}
+
+.viewport .time {
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 0 0 0.5rem;
+}
+
+.viewport .banner {
+  font-size: 1.5rem;
+  display: grid;
+  grid-template-columns: [banner-left] 5% [banner-text] auto [banner-rigth] 5% [banner-end];
+  justify-items: center;
+  align-items: center;
+}
+
+.arrow-left {
+  justify-self: right;
+}
+
+.arrow-right {
+  justify-self: left;
+}
+
+.viewport .controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.viewport .controls.paused {
+  justify-content: center;
+}

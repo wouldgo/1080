@@ -2,11 +2,14 @@
 import {nextVideo, prevVideo, play, restart} from './player.js';
 
 const bodyElement = document.querySelector('body')
-  , bannerElement = document.querySelector('.banner')
+  , bannerContainer = document.querySelector('#banner')
+  , loadingContainer = document.querySelector('#loading')
+  , waitPlsElement = document.querySelector('.wait-pls')
+  , startAllElement = document.querySelector('#banner .loading .play')
+  , videoContainer = document.querySelector('#video')
   , controlsElement = document.querySelector('.controls')
   , loadingElement = document.querySelector('.loading')
   , prevElement = document.querySelector('.prev')
-  , playElement = document.querySelector('.play')
   , pauseElement = document.querySelector('.pause')
   , replayElement = document.querySelector('.replay')
   , nextElement = document.querySelector('.next')
@@ -31,101 +34,36 @@ const bodyElement = document.querySelector('body')
       return ret;
     };
 
-
-progressElement.addEventListener('click', event => {
-  /*eslint-disable id-length*/
-  const {x} = event
-  /*eslint-enable*/
-    , width = progressElement.clientWidth
-    , left = progressElement.getBoundingClientRect().left
-    , proportion = (x - left) / width
-    , postionEvent = new window.CustomEvent('controls:skipTo', {
-      'detail': proportion
-    });
-
-  bodyElement.dispatchEvent(postionEvent);
-}, false);
-
 document.addEventListener('DOMContentLoaded', () => {
-  bannerElement.classList.remove('hidden');
-}, false);
-
-bodyElement.addEventListener('player:time', event => {
-  const {buffer, progress, currentTime, duration} = event.detail;
-
-  timeElement.innerHTML = [formatTime(currentTime), formatTime(duration)].join(' / ');
-  linearProgress.buffer = buffer;
-  linearProgress.progress = progress;
+  bannerContainer.classList.remove('hidden');
+  loadingContainer.classList.add('hidden');
 }, false);
 
 bodyElement.addEventListener('player:ready', () => {
-  loadingElement.classList.add('hidden');
-
-  controlsElement.classList.add('paused');
-  playElement.classList.remove('hidden');
-  bannerElement.classList.remove('hidden');
+  bannerContainer.classList.remove('hidden');
+  waitPlsElement.classList.add('hidden');
+  startAllElement.classList.remove('hidden');
 }, false);
 
 bodyElement.addEventListener('player:playing', () => {
-  controlsElement.classList.remove('paused');
-  progressElement.classList.remove('hidden');
-  timeElement.classList.remove('hidden');
-  bannerElement.classList.add('hidden');
+  bannerContainer.classList.add('hidden');
+  videoContainer.classList.remove('hidden');
+  //controlsElement.classList.remove('paused');
+  //progressElement.classList.remove('hidden');
+  //timeElement.classList.remove('hidden');
 
-  playElement.classList.add('hidden');
-  pauseElement.classList.remove('hidden');
-  replayElement.classList.remove('hidden');
-  prevElement.classList.remove('hidden');
-  nextElement.classList.remove('hidden');
+  //playElement.classList.add('hidden');
+  //pauseElement.classList.remove('hidden');
+  //replayElement.classList.remove('hidden');
+  //prevElement.classList.remove('hidden');
+  //nextElement.classList.remove('hidden');
 
-  prevElement.innerHTML = 'arrow_back';
-  prevElement.classList.remove('spin');
-  nextElement.innerHTML = 'arrow_forward';
-  nextElement.classList.remove('spin');
-});
-bodyElement.addEventListener('player:paused', () => {
-  controlsElement.classList.add('paused');
-  progressElement.classList.add('hidden');
-  timeElement.classList.add('hidden');
-  bannerElement.classList.remove('hidden');
-
-  playElement.classList.remove('hidden');
-  pauseElement.classList.add('hidden');
-  replayElement.classList.add('hidden');
-  prevElement.classList.add('hidden');
-  nextElement.classList.add('hidden');
+  //prevElement.innerHTML = 'arrow_back';
+  //prevElement.classList.remove('spin');
+  //nextElement.innerHTML = 'arrow_forward';
+  //nextElement.classList.remove('spin');
 });
 
-prevElement.addEventListener('click', () => {
-  if (prevElement.innerHTML === 'refresh') {
-
-    return;
-  }
-  prevElement.innerHTML = 'refresh';
-  prevElement.classList.add('spin');
-
-  return prevVideo();
-}, false);
-
-playElement.addEventListener('click', () => {
+startAllElement.addEventListener('click', () => {
   return play();
-}, false);
-
-pauseElement.addEventListener('click', () => {
-  return play();
-}, false);
-
-replayElement.addEventListener('click', () => {
-  return restart();
-}, false);
-
-nextElement.addEventListener('click', () => {
-  if (nextElement.innerHTML === 'refresh') {
-
-    return;
-  }
-  nextElement.innerHTML = 'refresh';
-  nextElement.classList.add('spin');
-
-  return nextVideo();
 }, false);

@@ -13,29 +13,17 @@ body {
   margin: 0;
   padding: 0;
   border: 0;
-
   display: grid;
-  grid-template-columns: [left-border] auto [players] 800px [rigth-border] auto;
-  justify-items: center;
-  align-items: center;
+  grid-template-rows: 10rem auto 10rem;
+  grid-template-columns: 10rem auto 10rem;
+  grid-template-areas:
+    "left top rigth"
+    "left main rigth";
 }
 
 img {
   width: 70%;
   height: auto;
-}
-
-@media screen and (min-width: 1450px) {
-
-  img {
-    width: inherit;
-    height: inherit;
-  }
-}
-
-a, a:hover {
-  color: inherit;
-  text-decoration: none;
 }
 
 iframe {
@@ -48,6 +36,14 @@ iframe.visible {
   max-height: inherit;
 }
 
+@media screen and (min-width: 1450px) {
+
+  img {
+    width: inherit;
+    height: inherit;
+  }
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -57,81 +53,97 @@ iframe.visible {
   }
 }
 
-.spin {
-  animation-name: spin;
-  animation-duration: 1000ms;
-  animation-iteration-count: infinite;
-  animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+a, a:hover {
+  color: inherit;
+  text-decoration: none;
 }
 
-.material-icons, .mdc-linear-progress{
+#loading, .loading {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+
+#banner {
+  display: grid;
+  grid-template-rows: 30rem 100px auto;
+  grid-template-areas:
+    "btext"
+    "blogo"
+    "bloading";
+  justify-items: center;
+  align-items: center;
+}
+
+#video {
+  display: grid;
+  grid-template-rows: 10rem 600px auto;
+  grid-template-columns: 10rem 800px 10rem;
+  grid-template-areas:
+    "prev-video time next-video"
+    "prev-video video next-video"
+    "prev-video controls next-video";
+}
+
+#banner, #video, #loading {
+  grid-area: main;
+}
+
+#banner .text {
+  grid-area: btext;
+  font-size: 1.5rem;
+}
+
+#banner .logos {
+  grid-area: blogo;
+}
+
+#banner .loading {
+  grid-area: bloading;
+}
+
+#banner .loading .play {
   cursor: pointer;
+}
+
+#video .arrow-left {
+  grid-area: prev-video
+}
+
+#video .arrow-right {
+  grid-area:next-video
+}
+
+#video .time {
+  grid-area: time;
+}
+
+#video .player {
+  grid-area: video;
+}
+
+#video[role="progressbar"] {
+  grid-area: controls;
 }
 
 .material-icons.md-3-rem {
   font-size: 3rem;
 }
 
-.viewport .time {
-  text-align: center;
-  font-size: 1.5rem;
-  padding: 0 0 0.5rem;
-}
-
-.viewport .banner {
-  font-size: 1.5rem;
-  display: grid;
-  grid-template-columns: [banner-left] 5% [banner-text] auto [banner-rigth] 5% [banner-end];
-  justify-items: center;
-  align-items: center;
-}
-
-.arrow-left {
-  justify-self: right;
-}
-
-.arrow-right {
-  justify-self: left;
-}
-
-.player {
-  max-width: 800px;
-  max-height: 600px;
-}
-
-.viewport .text {
-  padding-bottom: 2rem;
-}
-
-.viewport .text div {
-  padding: 0.5rem 0 0;
-}
-
-.viewport .logos {
-  grid-column-start: banner-left;
-  grid-column-end: banner-end;
-}
-
-.viewport .logos div {
-  text-align: center;
-}
-
-.viewport .controls {
-  display: flex;
-  justify-content: space-between;
-}
-
-.viewport .controls.paused {
-  justify-content: center;
+.mdc-linear-progress{
+  cursor: pointer;
 }
 
 .mdc-linear-progress {
   height: 1rem !important;
 }
 
-.loading {
-  display: flex;
-  justify-content: center;
+.spin {
+  animation-name: spin;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 
 .hidden {
