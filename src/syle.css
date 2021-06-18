@@ -14,8 +14,8 @@ body {
   padding: 0;
   border: 0;
   display: grid;
-  grid-template-rows: 10rem auto 10rem;
-  grid-template-columns: 10rem auto 10rem;
+  grid-template-rows: auto auto auto;
+  grid-template-columns: auto auto auto;
   grid-template-areas:
     "left top rigth"
     "left main rigth";
@@ -67,7 +67,7 @@ a, a:hover {
 
 #banner {
   display: grid;
-  grid-template-rows: 30rem 100px auto;
+  grid-template-rows: 15rem auto auto;;
   grid-template-areas:
     "btext"
     "blogo"
@@ -78,8 +78,8 @@ a, a:hover {
 
 #video {
   display: grid;
-  grid-template-rows: 10rem 600px auto;
-  grid-template-columns: 10rem 800px 10rem;
+  grid-template-rows: auto 600px auto;
+  grid-template-columns: auto 800px auto;
   grid-template-areas:
     "prev-video time next-video"
     "prev-video video next-video"
@@ -108,11 +108,15 @@ a, a:hover {
 }
 
 #video .arrow-left {
-  grid-area: prev-video
+  grid-area: prev-video;
+  align-self: center;
+  justify-self: start;
 }
 
 #video .arrow-right {
-  grid-area:next-video
+  grid-area:next-video;
+  align-self: center;
+  justify-self: end;
 }
 
 #video .time {
@@ -123,7 +127,7 @@ a, a:hover {
   grid-area: video;
 }
 
-#video[role="progressbar"] {
+#video .controls {
   grid-area: controls;
 }
 

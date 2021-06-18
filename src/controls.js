@@ -1,7 +1,8 @@
 /*global mdc*/
-import {nextVideo, prevVideo, play, restart} from './player.js';
+import {player} from './player.js';
 
-const bodyElement = document.querySelector('body')
+const {nextVideo, prevVideo, play, restart} = player
+  , bodyElement = document.querySelector('body')
   , bannerContainer = document.querySelector('#banner')
   , loadingContainer = document.querySelector('#loading')
   , waitPlsElement = document.querySelector('.wait-pls')
@@ -64,6 +65,6 @@ bodyElement.addEventListener('player:playing', () => {
   //nextElement.classList.remove('spin');
 });
 
-startAllElement.addEventListener('click', () => {
-  return play();
+startAllElement.addEventListener('click', async() => {
+  return await play();
 }, false);

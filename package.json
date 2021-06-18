@@ -1,5 +1,5 @@
 {
-  "name": "video-guz",
+  "name": "1080",
   "version": "2.0.1",
   "description": "",
   "main": "index.js",
@@ -12,11 +12,15 @@
     "precommit": "npm run validate",
     "preversion": "npm run validate",
     "version": "git add -A .",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push --all; git push --tags"
   },
+  "pre-commit": [
+    "validate"
+  ],
   "devDependencies": {
-    "eslint": "^6.0.1",
-    "husky": "^3.0.0"
+    "eslint": "7.28.0",
+    "pre-commit": "1.2.2",
+    "prettier": "2.3.1"
   },
   "dependencies": {
     "@material/linear-progress": "^3.1.0"

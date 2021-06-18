@@ -29,19 +29,20 @@
     </div>
     <div id="video" class="hidden">
       <div class="arrow-left">
-        <i class="material-icons md-3-rem prev hidden">arrow_back</i>
+        <i class="material-icons md-3-rem prev">arrow_back</i>
       </div>
       <div class="arrow-right">
-        <i class="material-icons md-3-rem next hidden">arrow_forward</i>
+        <i class="material-icons md-3-rem next">arrow_forward</i>
       </div>
 
-      <div class="time hidden">#</div>
+      <div class="time">#</div>
       <div class="player">
         <div id="player-0"></div>
         <div id="player-1"></div>
         <div id="player-2"></div>
       </div>
-      <div role="progressbar" class="mdc-linear-progress hidden">
+      <div class="controls">
+        <div role="progressbar" class="mdc-linear-progress">
           <div class="mdc-linear-progress__buffering-dots"></div>
           <div class="mdc-linear-progress__buffer"></div>
           <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
@@ -51,19 +52,18 @@
             <span class="mdc-linear-progress__bar-inner"></span>
           </div>
         </div>
-      <div class="controls">
-        <i class="material-icons md-3-rem replay hidden">skip_previous</i>
-        <i class="material-icons md-3-rem play hidden">play_arrow</i>
-        <i class="material-icons md-3-rem pause hidden">pause_circle_filled</i>
+        <i class="material-icons md-3-rem replay">skip_previous</i>
+        <i class="material-icons md-3-rem play">play_arrow</i>
+        <i class="material-icons md-3-rem pause">pause_circle_filled</i>
       </div>
     </div>
     <div id="loading">
       <i class="material-icons md-3-rem spin">gamepad</i>
     </div>
+    <script src="./node_modules/@material/linear-progress/dist/mdc.linearProgress.min.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script src="src/interaction.js" type="module"></script>
     <script src="src/player.js" type="module"></script>
     <script src="src/controls.js" type="module"></script>
-    <script src="./node_modules/@material/linear-progress/dist/mdc.linearProgress.min.js"></script>
-    <script src="https://www.youtube.com/iframe_api"></script>
   </body>
 </html>
