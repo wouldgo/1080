@@ -26,10 +26,11 @@ const bodyElement = document.querySelector('body')
       isPlaying) {
       const player = playersStatuses.get(`player-${playerFocused}`).player
         , newTime = player.getCurrentTime()
-        , roundedSeconds = Math.round(newTime);
+        , roundedSeconds = Math.round(newTime)
+        , changed = Math.ceil(newTime) - Math.ceil(currentTime) > 0;
 
       currentTime = newTime;
-      if (roundedSeconds % secondsUpdateInterval === 0) {
+      if (changed) {
         const progressValue = (newTime / maxDuration)
           , buffer = player.getVideoLoadedFraction()
           , timeEvent = new window.CustomEvent('player:time', {
